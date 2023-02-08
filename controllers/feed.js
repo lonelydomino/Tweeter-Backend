@@ -1,7 +1,6 @@
 const Tweet = require("../models/tweet")
 
 exports.getTweets = (req, res, next) => {
-    console.log('---------------------')
     Tweet.find()
     .then(tweets => {
         res.status(200).json({message: 'Fetched tweets successfully.', tweets: tweets})
@@ -20,3 +19,4 @@ exports.createTweet = (req, res, next) => {
         })
     })
 }
+
