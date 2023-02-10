@@ -1,7 +1,7 @@
 const bodyParser = require('body-parser')
 const express = require('express')
 const feedRoutes = require('./routes/feed')
-
+const authRoutes = require('./routes/auth')
 
 const app = express()
 const mongoose = require('mongoose')
@@ -17,7 +17,7 @@ app.use((req, res, next) => {
 app.use(bodyParser.json())
 
 app.use('/feed', feedRoutes)
-
+app.use('/auth', authRoutes)
 
 
 mongoose.connect(MONGODB_URI)
