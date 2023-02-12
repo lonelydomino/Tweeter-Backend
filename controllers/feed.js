@@ -1,4 +1,5 @@
 const Tweet = require("../models/tweet")
+const user = require("../models/user")
 
 exports.getTweets = (req, res, next) => {
     Tweet.find()
@@ -8,15 +9,32 @@ exports.getTweets = (req, res, next) => {
 }
 
 exports.createTweet = (req, res, next) => {
+    let author
+    console.log(req)
     const tweet = new Tweet({
-        content: req.body.content
+        content: req.body.content,
+        author: req.body.userId
     })
     tweet.save()
+    .then(result => {
+        return user.findById(req.body.userId)
+    })
+    .then(user => {
+        author = user
+        user.tweets.push(tweet)
+        return user.save()
+    })
     .then(result => {
         res.status(201).json({
             message: 'Tweet created successfully.',
             tweet: tweet
         })
+    })
+    .catch(err => {
+        if(!err.statusCode){
+            err.statusCode = 500
+        }
+        next(err)
     })
 }
 
