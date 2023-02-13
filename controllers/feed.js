@@ -1,5 +1,5 @@
 const Tweet = require("../models/tweet")
-const user = require("../models/user")
+const User = require("../models/user")
 
 exports.getTweets = (req, res, next) => {
     Tweet.find()
@@ -10,7 +10,6 @@ exports.getTweets = (req, res, next) => {
 
 exports.createTweet = (req, res, next) => {
     let author
-    // console.log(req)
     const tweet = new Tweet({
         content: req.body.content,
         authorName: req.body.authorName,
@@ -39,3 +38,33 @@ exports.createTweet = (req, res, next) => {
     })
 }
 
+exports.deleteTweet = (req, res, next) => {
+    const tweetId = req.params.tweetId
+    Tweet.findById(tweetId)
+    .then(tweet => {
+        console.log(req)
+        if(!tweet){
+            const error = new Error('Could not find tweet')
+            error.statusCode = 404
+            throw error
+        }
+        if(tweet.authorId.toString() !== req.userId){
+            const error = new Error('Not authorized.')
+            error.statusCode = 403
+            throw error
+        }
+        return Tweet.findByIdAndRemove(tweetId)
+    })
+    .then(result => {
+        return User.findById(req.userId)
+    })
+    .then(result => {
+        res.status(200).json({message: 'Deleted Tweet'})
+    })
+    .catch(err => {
+        if(!err.statusCode){
+            err.statusCode = 500
+        }
+        next(err)
+    })
+}
