@@ -10,6 +10,7 @@ exports.getTweets = (req, res, next) => {
 
 exports.createTweet = (req, res, next) => {
     let author
+
     const tweet = new Tweet({
         content: req.body.content,
         authorName: req.body.authorName,
@@ -17,7 +18,7 @@ exports.createTweet = (req, res, next) => {
     })
     tweet.save()
     .then(result => {
-        return user.findById(req.body.authorId)
+        return User.findById(req.body.authorId)
     })
     .then(user => {
         author = user
@@ -40,6 +41,7 @@ exports.createTweet = (req, res, next) => {
 
 exports.deleteTweet = (req, res, next) => {
     const tweetId = req.params.tweetId
+    console.log(req.params)
     Tweet.findById(tweetId)
     .then(tweet => {
         console.log(req)
