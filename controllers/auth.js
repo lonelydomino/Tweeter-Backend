@@ -6,13 +6,14 @@ exports.signup = (req, res, next) => {
     const email = req.body.email
     const name = req.body.name
     const password = req.body.password
-    
+    const handle = req.body.handle
     bcrypt.hash(password, 12)
     .then(hashedPassword => {
         const user = new User({
             email: email,
             password: hashedPassword,
-            name: name
+            name: name,
+            handle: handle
         })
         return user.save()
     })
@@ -49,7 +50,7 @@ exports.login = (req, res, next) => {
             throw error
         }
         const token = jwt.sign({ email: loadedUser.email, userId: loadedUser._id.toString()}, 'secret', { expiresIn: '1h'})
-        res.status(200).json({token: token, name: loadedUser.name, userId: loadedUser._id.toString()})
+        res.status(200).json({token: token, name: loadedUser.name, handle: loadedUser.handle, userId: loadedUser._id.toString()})
         
     })
     .catch(err => {
