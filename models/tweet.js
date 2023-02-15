@@ -14,6 +14,14 @@ const tweetSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User',
         required: true
+    },
+    tweetedAt: {
+        type: Date,
+        required: true
+    },
+    likesCount: {
+        type: Number,
+        
     }
 }, { timestamps: true })
 

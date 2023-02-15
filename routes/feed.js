@@ -9,6 +9,9 @@ router.get('/tweets', feedController.getTweets)
 
 router.post('/tweet', isAuth, feedController.createTweet)
 
+router.patch('/tweets/:id/act', feedController.updateLikes)
+
 router.delete('/tweet/:tweetId', isAuth, feedController.deleteTweet)
+
 
 module.exports = router

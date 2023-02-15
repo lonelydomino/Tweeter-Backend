@@ -70,3 +70,12 @@ exports.deleteTweet = (req, res, next) => {
         next(err)
     })
 }
+
+exports.updateLikes = (res, req, next) => {
+    const action = req.body.action
+    const counter = action === 'Like' ? 1 : -1
+    Tweet.updateOne({_id: req.params.id}, {$inc: {likesCount: counter}}, {}, (err, numberA))
+    .then(res => {
+        console.log(res)
+    })
+}
