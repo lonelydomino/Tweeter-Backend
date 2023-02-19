@@ -71,11 +71,48 @@ exports.deleteTweet = (req, res, next) => {
     })
 }
 
-exports.updateLikes = (res, req, next) => {
+exports.updateLikes = (req, res, next) => {
     const action = req.body.action
-    const counter = action === 'Like' ? 1 : -1
-    Tweet.updateOne({_id: req.params.id}, {$inc: {likesCount: counter}}, {}, (err, numberA))
-    .then(res => {
-        console.log(res)
+    let user
+    let loadedTweet
+    Tweet.findById(req.params.tweetId)
+    .then(tweet => {
+        if(!tweet) {
+            const error = new Error('Could not find tweet')
+            error.statusCode = 404
+            throw error
+        }
+        // if(tweet.authorId.toString() !== req.userId){
+        //     const error = new Error('Not authorized.')
+        //     error.statusCode = 403
+        //     throw error
+        // }
+        if(action === 'Like'){
+            tweet.likesCount += 1
+        }  else {
+            tweet.likesCount -= 1
+        }
+        loadedTweet = tweet
+        return tweet.save()
     })
+    .then(result =>  User.findById(req.userId))
+    .then(user => {
+        // if(user.likedTweets.includes(loadedTweet)) return
+        if(action === 'Like'){
+            console.log('adding tweet to likedTweets')
+            user.likedTweets.push(loadedTweet)
+        } else {
+            let newArray = user.likedTweets.filter(tweet => {
+                return loadedTweet._id.toString() === tweet.toString()
+            })
+            console.log(user.likedTweets)
+            console.log(newArray)
+            user.likedTweets = newArray
+        }
+        return user.save()
+    })
+    .then(result => {
+        console.log('made it here')
+    })
+
 }

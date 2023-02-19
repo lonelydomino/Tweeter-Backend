@@ -15,12 +15,9 @@ const tweetSchema = new Schema({
         ref: 'User',
         required: true
     },
-    tweetedAt: {
-        type: Date,
-        required: true
-    },
     likesCount: {
         type: Number,
+        default: 0
         
     }
 }, { timestamps: true })
