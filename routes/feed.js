@@ -13,5 +13,6 @@ router.patch('/tweets/:tweetId/act', isAuth, feedController.updateLikes)
 
 router.delete('/tweet/:tweetId', isAuth, feedController.deleteTweet)
 
+router.get('/tweets/:userId/liked', feedController.getLikedTweets)
 
 module.exports = router

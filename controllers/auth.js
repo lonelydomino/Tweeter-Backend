@@ -52,7 +52,7 @@ exports.login = (req, res, next) => {
             throw error
         }
         const token = jwt.sign({ email: loadedUser.email, userId: loadedUser._id.toString()}, 'secret', { expiresIn: '1h'})
-        res.status(200).json({token: token, name: loadedUser.name, handle: loadedUser.handle, userId: loadedUser._id.toString()})
+        res.status(200).json({token: token, name: loadedUser.name, handle: loadedUser.handle, userId: loadedUser._id.toString(), likedTweets: loadedUser.likedTweets})
         
     })
     .catch(err => {

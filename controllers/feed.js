@@ -99,14 +99,11 @@ exports.updateLikes = (req, res, next) => {
     .then(user => {
         // if(user.likedTweets.includes(loadedTweet)) return
         if(action === 'Like'){
-            console.log('adding tweet to likedTweets')
             user.likedTweets.push(loadedTweet)
         } else {
             let newArray = user.likedTweets.filter(tweet => {
-                return loadedTweet._id.toString() === tweet.toString()
+                return loadedTweet._id.toString() !== tweet.toString()
             })
-            console.log(user.likedTweets)
-            console.log(newArray)
             user.likedTweets = newArray
         }
         return user.save()
@@ -114,5 +111,12 @@ exports.updateLikes = (req, res, next) => {
     .then(result => {
         console.log('made it here')
     })
+}
 
+exports.getLikedTweets = (req, res, next) => {
+    User.findById(req.params.userId)
+    .then(user => {
+        console.log('here')
+        res.status(200).json({message: 'Fetched liked tweets successfully.', likedTweets: user.likedTweets})
+    })
 }
