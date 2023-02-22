@@ -116,7 +116,6 @@ exports.updateLikes = (req, res, next) => {
 exports.getLikedTweets = (req, res, next) => {
     User.findById(req.params.userId)
     .then(user => {
-        console.log('here')
         res.status(200).json({message: 'Fetched liked tweets successfully.', likedTweets: user.likedTweets})
     })
 }
