@@ -109,7 +109,8 @@ exports.updateLikes = (req, res, next) => {
         return user.save()
     })
     .then(result => {
-        console.log('made it here')
+        console.log(result)
+        res.status(200).json({message: 'Liked tweet successfully.'})
     })
 }
 
