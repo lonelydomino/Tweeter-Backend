@@ -18,8 +18,7 @@ exports.signup = (req, res, next) => {
         return user.save()
     })
     .then(result => {
-        console.log(result)
-        const token = jwt.sign({ email: result.email, userId: result._id.toString()}, 'secret', { expiresIn: '1h'})
+        const token = jwt.sign({ email: result.email, userId: result._id.toString()}, process.env.JWT_SECRET, { expiresIn: '1h'})
         res.status(201).json({ token: token, message: 'User created.', userId: result._id, handle: result.handle})
     })
     .catch(err => {
@@ -51,7 +50,7 @@ exports.login = (req, res, next) => {
             error.statusCode = 401
             throw error
         }
-        const token = jwt.sign({ email: loadedUser.email, userId: loadedUser._id.toString()}, 'secret', { expiresIn: '1h'})
+        const token = jwt.sign({ email: loadedUser.email, userId: loadedUser._id.toString()}, process.env.JWT_SECRET, { expiresIn: '1h'})
         res.status(200).json({token: token, name: loadedUser.name, handle: loadedUser.handle, userId: loadedUser._id.toString(), likedTweets: loadedUser.likedTweets})
         
     })
