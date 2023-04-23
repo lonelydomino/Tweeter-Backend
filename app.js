@@ -45,6 +45,6 @@ app.use('/auth', authRoutes)
 
 mongoose.connect(process.env.MONGODB_URI)
 .then( result => {
-    app.listen(8080)
+    app.listen('https://tweeter-backend.herokuapp.com/')
 })
 .catch(err => console.log(err))
