@@ -7,13 +7,16 @@ exports.signup = (req, res, next) => {
     const name = req.body.name
     const password = req.body.password
     const handle = req.body.handle
+    const image = req.body.image
+
     bcrypt.hash(password, 12)
     .then(hashedPassword => {
         const user = new User({
             email: email,
             password: hashedPassword,
             name: name,
-            handle: handle
+            handle: handle,
+            imageUrl: image
         })
         return user.save()
     })
